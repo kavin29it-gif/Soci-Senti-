@@ -16,10 +16,11 @@ import type {
 } from './types';
 
 
-const API_BASE = '/api';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${url}`, {
+  const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+  const res = await fetch(`${API_BASE}${cleanUrl}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
